@@ -1,5 +1,5 @@
 ---
-title: "Reporte"
+title: "Reporte sobre análisis de protestas sociales en Sudamérica"
 author: "Jorge San Martín"
 format: html
 editor: visual
