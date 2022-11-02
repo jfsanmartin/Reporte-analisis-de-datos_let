@@ -15,3 +15,91 @@ Sin embargo, este fenómeno no ha sido homogéneo en los distintos países invol
 Este trabajo está basado, principlamente, en el trabajo realizado por el proyecto *Armed Conflict Location & Event Data Project* (ACLED) que recopila información sobre fechas, actores, lugares, muertes y todo tipo de eventos de violencia y protesta política en todo el mundo. El reporte busca analizar cuantitativamente, entre países, las diferencias en la cantidad de manifestaciones, su duración temporal y sus niveles de violencia, para armar un panorama general y específico sobre el fenómeno de las masivas protestas sociales de los últimos años.
 
 Debido al tamaño y complejidad de esta tarea, y de la completa base de datos que entrega ACLED, por simplicidad se trabajó en este reporte con los datos sobre manifestaciones basados en países de Sudamérica. Las variables analizadas corresponden a: fecha de la manifestación, mes y año, desde el año 2018 hasta el 2022; tipo de evento, *riots* (disturbios) y *protests* para manifestaciones violentas y no violentas respectivamente; y cantidad de muertos en la manifestación como medida de violencia. En las siguientes secciones se encuentran el Desarrollo donde está el grueso del analísis con sus correspondientes resultados en gráficos de los datos, y la Conclusión que entrega las últimas reflexiones extraídas a partir de la información obtenida.
+
+
+
+## Introducción
+
+texto que anuncia el gráfico
+
+```{r}
+#| echo: false
+#| output: false
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(dslabs)
+library(showtext)
+library(ggthemes)
+library(scales)
+library(ggtext) # para editar anotaciones y etiquetas
+library(gghighlight) # para destacar valores en un gráfico
+library(here)
+Sys.setlocale("LC_TIME", "English")
+#datos_protestas <- read_csv("Datos/datos-protestas.csv")
+datos_protestas <- read.csv(here::here("Datos/datos-protestas.csv"))
+# Grafico 1 ----
+
+font_add_google(name = "Lato", family = "Lato")
+showtext_auto()
+
+graph1 <- datos_protestas %>% 
+  group_by(Mes, Pais) %>% 
+  summarize(cantidad = length(Escala),
+            Mes = as.Date(Mes))
+
+hex <- hue_pal()(10)
+hex[1] <- "#52fff1"
+hex[3] <- "#00ab1f"
+hex[4] <- "#ff4545"
+hex[5] <- "#fff305"
+hex[7] <- "#0000FF33"
+hex[8] <- "#9999FF33"
+hex[9] <- "#FF33E633"
+hex[2] <- "#FFB38033"
+hex[6] <- "#00B3B333"
+
+graph11 <- graph1 |> 
+  filter(Pais %in% c("Chile", "Argentina", "Peru", "Bolivia", "Ecuador",
+                     "Colombia", "Venezuela", "Uruguay", "Paraguay", "Brazil")) |> 
+  ggplot(aes(Mes, cantidad, color = Pais)) +
+  geom_line(size = 1.5) +
+  #scale_color_colorblind() +
+  scale_color_manual(values = hex) +
+  labs(title = "Cantidad de manifestaciones por mes",
+       x = NULL,
+       y = "Cantidad de manifestaciones",
+       color = "país") +
+  scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
+  coord_cartesian(ylim=c(0,1000))
+
+
+
+
+```
+```{r}
+#| echo: false
+graph11 + 
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    panel.grid.major.y = element_line(color = "gray40"),
+    panel.grid.minor.y = element_line(color = "gray30"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  ) 
+```
+
+texto que guía la interpretación del gráfico
+
+
