@@ -6,6 +6,8 @@ library(dslabs)
 library(showtext)
 library(ggthemes)
 library(scales)
+library(ggtext) # para editar anotaciones y etiquetas
+library(gghighlight) # para destacar valores en un gráfico
 
 datos_protestas <- read_csv("Datos/datos-protestas.csv")
 
@@ -16,20 +18,22 @@ graph1 <- datos_protestas %>%
   group_by(Mes, Pais) %>% 
   summarize(cantidad = length(Escala))
 
+hex <- hue_pal()(10)
+
 graph11 <- graph1 |> 
   filter(Pais %in% c("Chile", "Argentina", "Peru", "Bolivia", "Ecuador",
                      "Colombia", "Venezuela", "Uruguay", "Paraguay", "Brazil",
                      "Guyana", "French Guiana", "Suriname")) |> 
   ggplot(aes(Mes, cantidad, color = Pais)) +
-  geom_line(size = 1) +
-  scale_color_colorblind() +
-  labs(title = "Evolución del PIB en Argentina, Chile y Uruguay",
+  geom_line(size = 2) +
+  #scale_color_colorblind() +
+  scale_color_manual(values = hex) +
+  labs(title = "Cantidad de manifestaciones por mes",
        x = NULL,
-       y = "PIB en dólares",
+       y = "Cantidad de manifestaciones",
        color = "país") +
   scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
-  scale_y_continuous(limits = c(0,1200))
-  
+  coord_cartesian(ylim=c(0,1000))
 
 graph11 + 
   theme(
@@ -39,7 +43,7 @@ graph11 +
     axis.title.y = element_text(size = 15),
     legend.position = "top",
     legend.justification = "left",
-    legend.text = element_text(size = 14),
+    legend.text = element_text(size = 15),
     panel.grid.major.y = element_line(color = "gray40"),
     panel.grid.minor.y = element_line(color = "gray30"),
     panel.grid.major.x = element_blank(),
@@ -47,8 +51,5 @@ graph11 +
     plot.background = element_rect(fill = "#f3fafd"),
     legend.background = element_blank(),
     panel.background = element_blank(),
-    axis.ticks = element_line(size = 2)
+    axis.ticks = element_line(size = 1)
   ) 
-
-
-
