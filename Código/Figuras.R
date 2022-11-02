@@ -49,11 +49,11 @@ graph11 +
   theme(
     text = element_text(family = "Lato"),
     plot.title = element_text(size = 24),
-    axis.text = element_text(size = 15), 
-    axis.title.y = element_text(size = 15),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
     legend.position = "top",
     legend.justification = "left",
-    legend.text = element_text(size = 15),
+    legend.text = element_text(size = 20),
     panel.grid.major.y = element_line(color = "gray40"),
     panel.grid.minor.y = element_line(color = "gray30"),
     panel.grid.major.x = element_blank(),
@@ -68,11 +68,72 @@ ggsave("Figuras/grafico_1.png")
 
 # Grafico 2 ----
 
+muerte1 <- datos_protestas |> 
+  filter(Muertos > 0) |> 
+  group_by(Pais) |> 
+  summarize(Muertos = sum(Muertos)) |> 
+  arrange(desc(Muertos))
+  
+muerte1 |> 
+  ggplot(aes(reorder(Pais, -Muertos), Muertos)) +
+  geom_col(fill = "#00d1ae") +
+  geom_text(aes(label = Muertos),
+            vjust = 1.5,
+            color = "white",
+            fontface = "bold") +
+  labs(title = "Cantidad de muertos en manifestaciones por país",
+       subtitle = "entre 2018 y 2021",
+       x = NULL,
+       y = "Muertes") +
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    plot.background = element_rect(fill = "#f3fafd"),
+    axis.ticks = element_line(size = 1)
+  ) 
 
+ggsave("Figuras/grafico_2.png")
+# Grafico 3 ----
 
+muerte2 <- datos_protestas |> 
+  filter(Muertos > 0) |> 
+  group_by(Mes, Pais) |> 
+  filter(Muertos == max(Muertos)) |> 
+  summarize(fyl = paste(Pais, "\n",substr(Mes, start = 1, stop = 7)),
+            Muertos = Muertos) |> 
+  arrange(desc(Muertos))
 
+muerte2 <- head(muerte2, 10)
 
+muerte2 |> 
+  ggplot(aes(reorder(fyl, -Muertos), Muertos)) +
+  geom_col(fill = "#d1a000") +
+  geom_text(aes(label = Muertos),
+            vjust = 1.5,
+            color = "white",
+            fontface = "bold") +
+  labs(title = "Cantidad de muertos en manifestaciones por país y mes",
+       subtitle = "entre 2018 y 2021",
+       x = NULL,
+       y = "Cantidad de muertos") +
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    plot.background = element_rect(fill = "#f3fafd"),
+    axis.ticks = element_line(size = 1)
+  ) 
 
+ggsave("Figuras/grafico_3.png")
 
 
 
