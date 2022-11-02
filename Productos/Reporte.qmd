@@ -5,7 +5,25 @@ format: html
 editor: visual
 self-contained: true
 ---
-
+```{r}
+#| echo: false
+#| output: false
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(dslabs)
+library(showtext)
+library(ggthemes)
+library(scales)
+library(ggtext) # para editar anotaciones y etiquetas
+library(gghighlight) # para destacar valores en un gráfico
+library(here)
+library(gt)
+Sys.setlocale("LC_TIME", "English")
+#datos_protestas <- read_csv("Datos/datos-protestas.csv")
+datos_protestas <- read.csv(here::here("Datos/datos-protestas.csv"))
+```
 ## Introducción
 
 Durante el año 2019, Chile se vió inmerso en una serie de masivas y violentas protestas a nivel nacional que conmocionaron al país, teniendo importantes consecuencias a nivel político y social; situación que acabó por denominarse "Estallido social". Sin embargo, Chile no fue el único país latinoamericano envuelto en masivas protestas durante los últimos años. También experimentaron estallidos países como Ecuador el 2019, Colombia el 2019-2020, Perú el 2020, entre otros. Esto nos indica que las masivas protestas sociales del último tiempo ha sido un fenómeno que ha permeado el subcontinente latinoamericano.
@@ -19,6 +37,23 @@ Debido al tamaño y complejidad de esta tarea, y de la completa base de datos qu
 
 
 ## Resultados
+
+```{r}
+#| echo: false
+
+data.frame(Variables = names(datos_protestas),
+	descripción = c(
+		"País donde ocurrió el evento",
+		"Mes en que ocurrió el evento",
+		"Año en que ocurrió el evento",
+		"Evento de tipo protesta o disturbio",
+		"Escala nacional, subnacional u otros",
+		"Cantidad de muertos en el evento"
+		)) |>
+	gt()
+
+```
+
 
 Como se puede observar en la Figura 1:
 

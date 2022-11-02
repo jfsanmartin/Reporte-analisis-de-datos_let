@@ -98,6 +98,8 @@ muerte1 |>
   ) 
 
 ggsave("Figuras/grafico_2.png")
+
+
 # Grafico 3 ----
 
 muerte2 <- datos_protestas |> 
