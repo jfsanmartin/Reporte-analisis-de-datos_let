@@ -11,6 +11,8 @@ library(gghighlight) # para destacar valores en un gráfico
 
 datos_protestas <- read_csv("Datos/datos-protestas.csv")
 
+# Grafico 1 ----
+
 font_add_google(name = "Lato", family = "Lato")
 showtext_auto()
 
@@ -18,13 +20,24 @@ graph1 <- datos_protestas %>%
   group_by(Mes, Pais) %>% 
   summarize(cantidad = length(Escala))
 
+hex <- hue_pal()(10)
+hex[1] <- "#52fff1"
+hex[3] <- "#00ab1f"
+hex[4] <- "#ff4545"
+hex[5] <- "#fff305"
+hex[7] <- "#0000FF33"
+hex[8] <- "#9999FF33"
+hex[9] <- "#FF33E633"
+hex[2] <- "#FFB38033"
+hex[6] <- "#00B3B333"
+
 graph11 <- graph1 |> 
   filter(Pais %in% c("Chile", "Argentina", "Peru", "Bolivia", "Ecuador",
                      "Colombia", "Venezuela", "Uruguay", "Paraguay", "Brazil")) |> 
   ggplot(aes(Mes, cantidad, color = Pais)) +
-  geom_line(size = 2) +
+  geom_line(size = 1.5) +
   #scale_color_colorblind() +
-  scale_color_manual(values = hue_pal()(10)) +
+  scale_color_manual(values = hex) +
   labs(title = "Cantidad de manifestaciones por mes",
        x = NULL,
        y = "Cantidad de manifestaciones",
@@ -50,4 +63,23 @@ graph11 +
     panel.background = element_blank(),
     axis.ticks = element_line(size = 1)
   ) 
+ggsave("Figuras/grafico_1.png")
+
+
+# Grafico 2 ----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
