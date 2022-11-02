@@ -18,16 +18,13 @@ graph1 <- datos_protestas %>%
   group_by(Mes, Pais) %>% 
   summarize(cantidad = length(Escala))
 
-hex <- hue_pal()(10)
-
 graph11 <- graph1 |> 
   filter(Pais %in% c("Chile", "Argentina", "Peru", "Bolivia", "Ecuador",
-                     "Colombia", "Venezuela", "Uruguay", "Paraguay", "Brazil",
-                     "Guyana", "French Guiana", "Suriname")) |> 
+                     "Colombia", "Venezuela", "Uruguay", "Paraguay", "Brazil")) |> 
   ggplot(aes(Mes, cantidad, color = Pais)) +
   geom_line(size = 2) +
   #scale_color_colorblind() +
-  scale_color_manual(values = hex) +
+  scale_color_manual(values = hue_pal()(10)) +
   labs(title = "Cantidad de manifestaciones por mes",
        x = NULL,
        y = "Cantidad de manifestaciones",
@@ -53,3 +50,4 @@ graph11 +
     panel.background = element_blank(),
     axis.ticks = element_line(size = 1)
   ) 
+
