@@ -137,12 +137,56 @@ muerte2 |>
 
 ggsave("Figuras/grafico_3.png")
 
+# Grafico 4 ----
+
+font_add_google(name = "Lato", family = "Lato")
+showtext_auto()
+
+chiled <- datos_protestas %>% 
+  filter(Pais %in% "Chile") |> 
+  filter(Tipo_de_evento == "Disturbios") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Disturbios = length(Escala))
+  
+chilep <- datos_protestas %>% 
+  filter(Pais %in% "Chile") |> 
+  filter(Tipo_de_evento == "Protestas") |> 
+group_by(Mes, Pais) %>% 
+  summarize(Protestas = length(Escala))
+
+chile <-  chiled |> 
+  left_join(chilep)
 
 
 
+chilegraph <- ggplot(chile, aes(Mes)) + 
+  geom_line(aes(y = Disturbios, colour = "Disturbios"), size = 1.5) + 
+  geom_line(aes(y = Protestas, colour = "Protestas"), size = 1.5) +
+  labs(title = "Cantidad de manifestaciones por mes",
+       x = NULL,
+       y = "Cantidad",
+       color = "tipo:") +
+  scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
+  coord_cartesian(ylim=c(0,500))
 
+chilegraph + 
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    panel.grid.major.y = element_line(color = "gray40"),
+    panel.grid.minor.y = element_line(color = "gray30"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  ) 
 
-
-
-
+ggsave("Figuras/grafico_4.png")
 
