@@ -18,9 +18,9 @@ Debido al tamaño y complejidad de esta tarea, y de la completa base de datos qu
 
 
 
-## Introducción
+## Resultados
 
-texto que anuncia el gráfico
+Como se puede observar en la Figura 1:
 
 ```{r}
 #| echo: false
@@ -67,7 +67,7 @@ graph11 <- graph1 |>
   geom_line(size = 1.5) +
   #scale_color_colorblind() +
   scale_color_manual(values = hex) +
-  labs(title = "Cantidad de manifestaciones por mes",
+  labs(title = "Figura 1: Cantidad de manifestaciones por mes",
        x = NULL,
        y = "Cantidad de manifestaciones",
        color = "país") +
@@ -100,6 +100,6 @@ graph11 +
   ) 
 ```
 
-texto que guía la interpretación del gráfico
+En la figura anterior se muestra una serie de tiempo acerca de la cantidad de manifestaciones mensuales según lps estados sudamericanos. La disposición visual está enfocada en los países con mayor actividad, los cuales son: Argentina, Brasil, Chile, Colombia y Venezuela.
 
 
