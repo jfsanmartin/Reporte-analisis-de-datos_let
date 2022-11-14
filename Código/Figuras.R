@@ -58,7 +58,7 @@ graph11 +
     panel.grid.minor.y = element_line(color = "gray30"),
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank(),
-    plot.background = element_rect(fill = "#f3fafd"),
+    #plot.background = element_rect(fill = "#f3fafd"),
     legend.background = element_blank(),
     panel.background = element_blank(),
     axis.ticks = element_line(size = 1)
@@ -93,7 +93,7 @@ muerte1 |>
     legend.position = "top",
     legend.justification = "left",
     legend.text = element_text(size = 20),
-    plot.background = element_rect(fill = "#f3fafd"),
+    #plot.background = element_rect(fill = "#f3fafd"),
     axis.ticks = element_line(size = 1)
   ) 
 
@@ -131,7 +131,7 @@ muerte2 |>
     legend.position = "top",
     legend.justification = "left",
     legend.text = element_text(size = 20),
-    plot.background = element_rect(fill = "#f3fafd"),
+    #plot.background = element_rect(fill = "#f3fafd"),
     axis.ticks = element_line(size = 1)
   ) 
 
@@ -182,7 +182,7 @@ chilegraph +
     panel.grid.minor.y = element_line(color = "gray30"),
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank(),
-    plot.background = element_rect(fill = "#f3fafd"),
+    #plot.background = element_rect(fill = "#f3fafd"),
     legend.background = element_blank(),
     panel.background = element_blank(),
     axis.ticks = element_line(size = 1)
