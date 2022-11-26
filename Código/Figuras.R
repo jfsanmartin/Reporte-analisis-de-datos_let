@@ -129,6 +129,7 @@ muerte1 |>
   geom_col(fill = "#00d1ae") +
   geom_text(aes(label = Muertos),
             vjust = 1.5,
+            size = 7,
             color = "white",
             fontface = "bold") +
   labs(title = "Cantidad de muertos en manifestaciones por país",
@@ -144,6 +145,11 @@ muerte1 |>
     legend.justification = "left",
     legend.text = element_text(size = 20),
     #plot.background = element_rect(fill = "#f3fafd"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
     axis.ticks = element_line(size = 1)
   ) 
 
@@ -169,9 +175,10 @@ muerte2 |>
   geom_col(fill = "#d1a000") +
   geom_text(aes(label = Muertos),
             vjust = 1.5,
+            size = 7,
             color = "white",
             fontface = "bold") +
-  labs(title = "Cantidad de muertos en manifestaciones por país y mes",
+  labs(title = "Cantidad de muertos en manifestaciones agrupados por mes y país",
        subtitle = "entre 2018 y 2021",
        x = NULL,
        y = "Cantidad de muertos") +
@@ -184,6 +191,11 @@ muerte2 |>
     legend.justification = "left",
     legend.text = element_text(size = 20),
     #plot.background = element_rect(fill = "#f3fafd"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
     axis.ticks = element_line(size = 1)
   ) 
 
