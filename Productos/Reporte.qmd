@@ -4,7 +4,9 @@ author: "Jorge San Martín"
 format: html
 editor: visual
 self-contained: true
+lang: "es"
 ---
+
 ```{r}
 #| echo: false
 #| output: false
@@ -24,9 +26,12 @@ Sys.setlocale("LC_TIME", "English")
 #datos_protestas <- read_csv("Datos/datos-protestas.csv")
 datos_protestas <- read.csv(here::here("Datos/datos-protestas.csv"))
 ```
+
+## Resumen
+
 ## Introducción
 
-Durante el año 2019, Chile se vió inmerso en una serie de masivas y violentas protestas a nivel nacional que conmocionaron al país, teniendo importantes consecuencias a nivel político y social; situación que acabó por denominarse "Estallido social". Sin embargo, Chile no fue el único país latinoamericano envuelto en masivas protestas durante los últimos años. También experimentaron estallidos países como Ecuador el 2019, Colombia el 2019-2020, Perú el 2020, entre otros. Esto nos indica que las masivas protestas sociales del último tiempo ha sido un fenómeno que ha permeado el subcontinente latinoamericano.
+Durante el año 2019, Chile se vió inmerso en una serie de masivas y violentas protestas a nivel nacional que conmocionaron al país, teniendo importantes consecuencias a nivel político y social; situación que acabó por denominarse "Estallido social". Sin embargo, Chile no fue el único país latinoamericano envuelto en masivas protestas durante los últimos años. También experimentaron estallidos países como Ecuador el 2019, Colombia el 2019-2020, Perú el 2020, entre otros. Esto nos indica que las masivas protestas sociales del último tiempo han sido un fenómeno que ha permeado el subcontinente latinoamericano.
 
 Sin embargo, este fenómeno no ha sido homogéneo en los distintos países involucrados; hay diferencias remarcables, como la masividad, duración temporal y la violencia de estas protestas, que pueden ser de interés para futuros análisis de carácter sociológico, político, económico, etc... Es debido a esto el posible valor de analizar las características que diferencian estos fenómenos de masivas protestas en sudamérica en los últimos cuatro años.
 
@@ -34,14 +39,26 @@ Este trabajo está basado, principlamente, en el trabajo realizado por el proyec
 
 Debido al tamaño y complejidad de esta tarea, y de la completa base de datos que entrega ACLED, por simplicidad se trabajó en este reporte con los datos sobre manifestaciones basados en países de Sudamérica. Las variables analizadas corresponden a: fecha de la manifestación, mes y año, desde el año 2018 hasta el 2022; tipo de evento, *riots* (disturbios) y *protests* para manifestaciones violentas y no violentas respectivamente; y cantidad de muertos en la manifestación como medida de violencia. En las siguientes secciones se encuentran el Desarrollo donde está el grueso del analísis con sus correspondientes resultados en gráficos de los datos, y la Conclusión que entrega las últimas reflexiones extraídas a partir de la información obtenida.
 
+## Contexto/Antecedentes (quizás)
 
+## Metodología
 
 ## Resultados
+
+
 
 ```{r}
 #| echo: false
 
 data.frame(Variables = names(datos_protestas),
+           tipo = c(
+             "cualitativa",
+             "temporal",
+             "temporal",
+             "cualitativa",
+             "cualitativa",
+             "cuantitativa"
+           ),
 	descripción = c(
 		"País donde ocurrió el evento",
 		"Mes en que ocurrió el evento",
@@ -53,7 +70,6 @@ data.frame(Variables = names(datos_protestas),
 	gt()
 
 ```
-
 
 Como se puede observar en la Figura 1:
 
@@ -113,6 +129,7 @@ graph11 <- graph1 |>
 
 
 ```
+
 ```{r}
 #| echo: false
 graph11 + 
@@ -138,3 +155,4 @@ graph11 +
 En la figura anterior se muestra una serie de tiempo acerca de la cantidad de manifestaciones mensuales según lps estados sudamericanos. La disposición visual está enfocada en los países con mayor actividad, los cuales son: Argentina, Brasil, Chile, Colombia y Venezuela.
 
 
+## Conclusión
