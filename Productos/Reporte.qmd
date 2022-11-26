@@ -40,15 +40,12 @@ Este trabajo está basado, principlamente, en el trabajo realizado por el proyec
 Debido al tamaño y complejidad de esta tarea, y de la completa base de datos que entrega ACLED, por simplicidad se trabajó en este reporte con los datos sobre manifestaciones basados en países de Sudamérica. Las variables analizadas corresponden a: fecha de la manifestación, mes y año, desde el año 2018 hasta el 2022; tipo de evento, *riots* (disturbios) y *protests* para manifestaciones violentas y no violentas respectivamente; y cantidad de muertos en la manifestación como medida de violencia. En las siguientes secciones se encuentran el Desarrollo donde está el grueso del analísis con sus correspondientes resultados en gráficos de los datos, y la Conclusión que entrega las últimas reflexiones extraídas a partir de la información obtenida.
 
 ## Contexto/Antecedentes (quizás)
-** Explicar que a partir de 2018 comenzó un período de masivas protestas en latinoamérica
+
+\*\* Explicar que a partir de 2018 comenzó un período de masivas protestas en latinoamérica
 
 ## Metodología
 
-** Decir que los datos vienen de ACLED
-** Presentar qué es ACLED
-** Explicar que se agruparon todos los datos por Mes
-** Explicar que se escogieron datos entre abril 2018 y enero 2022
-** Presentar la tabla de variables y explicarlas un poco
+\*\* Decir que los datos vienen de ACLED \*\* Presentar qué es ACLED \*\* Explicar que se agruparon todos los datos por Mes \*\* Explicar que se escogieron datos entre abril 2018 y enero 2022 \*\* Presentar la tabla de variables y explicarlas un poco
 
 ```{r}
 #| echo: false
@@ -72,26 +69,9 @@ data.frame(Variables = names(datos_protestas),
 
 ```
 
-
 ## Resultados
-** Presentar la serie temporal general a modo de una primera visualización del panorama general
-** Explicar que se escogen Brasil, Chile, Colombia y Venezuela por ser los países con mayor actividad. Y resaltar que Brasil está cortado porque llega a la cifra aproximada de 3500 manifestaciones
-** Presentar un gráfico de serie temporal pero con solo los países anteriores y con el eje y ajustado correctamente
-**Identificar los intervalos de tiempo (meses) de mayor cant de protestas para cada uno (esto luego se compará para ver si corresponde con los meses con más muertos)
 
-**Presentar gráfico sobre los países con más muertos y responder si corresponde con nuestra elección de países más violentos escogidos
-
-** Presentar gráfico de meses con más muertos por país (solo de los 4 países) y corroborar si corresponden con los intervalos de tiempo de peak de protestas. Notar que en ninguno de los peaks de Brasil corresponden con meses de gran cantidad de muertos.
-
-** Resaltar que en los momentos de mayor protestas es donde hay más muertos, por ende más violencia
-
-** Presentar 4 gráficos juntos, de cada país, que muestra cantidad de disturbio y protestas por separado y corroborar que en los 4 países existe correlación entre manifestaciones violentas y no violentas
-
-** Si es que sí, sugerir que manifestaciones violentas y no violentas están intrísecamente conectadas entre sí, y a la vez con la cantidad de muertos.
-
-
-
-Como se puede observar en la Figura 1:
+\*\* Presentar la serie temporal general a modo de una primera visualización del panorama general
 
 ```{r}
 #| echo: false
@@ -171,8 +151,399 @@ graph11 +
     axis.ticks = element_line(size = 1)
   ) 
 ```
+\*\* Explicar que se escogen Brasil, Chile, Colombia y Venezuela por ser los países con mayor actividad. Y resaltar que Brasil está cortado porque llega a la cifra aproximada de 3500 manifestaciones
+
+\*\* Presentar un gráfico de serie temporal pero con solo los países anteriores y con el eje y ajustado correctamente
+
+```{r}
+#| echo: false
+#| output: false
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(dslabs)
+library(showtext)
+library(ggthemes)
+library(scales)
+library(ggtext) # para editar anotaciones y etiquetas
+library(gghighlight) # para destacar valores en un gráfico
+library(here)
+Sys.setlocale("LC_TIME", "English")
+#datos_protestas <- read_csv("Datos/datos-protestas.csv")
+datos_protestas <- read.csv(here::here("Datos/datos-protestas.csv"))
+font_add_google(name = "Lato", family = "Lato")
+showtext_auto()
+
+graph1 <- datos_protestas %>% 
+  group_by(Mes, Pais) %>% 
+  summarize(cantidad = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+hex <- hue_pal()(10)
+hex[1] <- "#00ab1f"
+hex[2] <- "#ff4545"
+hex[3] <- "#fff305"
+hex[4] <- "#FF62BC"
+
+
+graph11 <- graph1 |> 
+  filter(Pais %in% c("Chile",
+                     "Colombia", "Venezuela", "Brazil")) |> 
+  ggplot(aes(Mes, cantidad, color = Pais)) +
+  geom_line(size = 1.5) +
+  #scale_color_colorblind() +
+  scale_color_manual(values = hex) +
+  labs(title = "Cantidad de manifestaciones por mes",
+       x = NULL,
+       y = "Cantidad de manifestaciones",
+       color = "país") +
+  scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
+  coord_cartesian(ylim=c(0,1250))
+```
+
+```{r}
+#| echo: false
+graph11 + 
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    panel.grid.major.y = element_line(color = "gray40"),
+    panel.grid.minor.y = element_line(color = "gray30"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  )
+```
+
+\*\*Identificar los intervalos de tiempo (meses) de mayor cant de protestas para cada uno (esto luego se compará para ver si corresponde con los meses con más muertos)
+
+\*\*Presentar gráfico sobre los países con más muertos y responder si corresponde con nuestra elección de países más violentos escogidos
+
+```{r}
+#| echo: false
+#| warning: false
+muerte1 <- datos_protestas |> 
+  filter(Muertos > 0) |> 
+  group_by(Pais) |> 
+  summarize(Muertos = sum(Muertos)) |> 
+  arrange(desc(Muertos))
+
+muerte1 |> 
+  ggplot(aes(reorder(Pais, -Muertos), Muertos)) +
+  geom_col(fill = "#00d1ae") +
+  geom_text(aes(label = Muertos),
+            vjust = 1.5,
+            size = 7,
+            color = "white",
+            fontface = "bold") +
+  labs(title = "Cantidad de muertos en manifestaciones por país",
+       subtitle = "entre 2018 y 2021",
+       x = NULL,
+       y = "Muertes") +
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  )
+```
+
+\*\* Presentar gráfico de meses con más muertos por país (solo de los 4 países) y corroborar si corresponden con los intervalos de tiempo de peak de protestas. Notar que en ninguno de los peaks de Brasil corresponden con meses de gran cantidad de muertos.
+
+```{r}
+#| echo: false
+#| warning: false
+muerte2 <- datos_protestas |> 
+  filter(Pais %in% c("Chile",
+                     "Colombia", "Venezuela", "Brazil")) |>
+  filter(Muertos > 0) |> 
+  group_by(Mes, Pais) |> 
+  filter(Muertos == max(Muertos)) |> 
+  summarize(fyl = paste(Pais, "\n",substr(Mes, start = 1, stop = 7)),
+            Muertos = Muertos) |> 
+  arrange(desc(Muertos))
+
+muerte2 <- head(muerte2, 10)
+
+muerte2 |> 
+  ggplot(aes(reorder(fyl, -Muertos), Muertos)) +
+  geom_col(fill = "#d1a000") +
+  geom_text(aes(label = Muertos),
+            vjust = 1.5,
+            size = 7,
+            color = "white",
+            fontface = "bold") +
+  labs(title = "Cantidad de muertos en manifestaciones agrupados por mes y país",
+       subtitle = "entre 2018 y 2021",
+       x = NULL,
+       y = "Cantidad de muertos") +
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  )
+```
+
+\*\* Resaltar que en los momentos de mayor protestas es donde hay más muertos, por ende más violencia
+
+\*\* Presentar 4 gráficos juntos, de cada país, que muestra cantidad de disturbio y protestas por separado y corroborar que en los 4 países existe correlación entre manifestaciones violentas y no violentas
+
+```{r}
+#| echo: false
+#| warning: false
+brazild <- datos_protestas %>% 
+  filter(Pais %in% "Brazil") |> 
+  filter(Tipo_de_evento == "Disturbios") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Disturbios = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+brazilp <- datos_protestas %>% 
+  filter(Pais %in% "Brazil") |> 
+  filter(Tipo_de_evento == "Protestas") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Protestas = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+brazil <-  brazild |> 
+  left_join(brazilp)
+
+
+
+brazilgraph <- ggplot(brazil, aes(Mes)) + 
+  geom_line(aes(y = Disturbios, colour = "Disturbios"), size = 1.5) + 
+  geom_line(aes(y = Protestas, colour = "Protestas"), size = 1.5) +
+  labs(title = "Cantidad de manifestaciones por mes en Brazil",
+       x = NULL,
+       y = "Cantidad",
+       color = "tipo:") +
+  scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
+  coord_cartesian(ylim=c(0,1000))
+
+brazilgraph <- brazilgraph + 
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    panel.grid.major.y = element_line(color = "gray40"),
+    panel.grid.minor.y = element_line(color = "gray30"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  )
+brazilgraph
+```
+
+```{r}
+#| echo: false
+#| warning: false
+font_add_google(name = "Lato", family = "Lato")
+showtext_auto()
+
+chiled <- datos_protestas %>% 
+  filter(Pais %in% "Chile") |> 
+  filter(Tipo_de_evento == "Disturbios") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Disturbios = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+chilep <- datos_protestas %>% 
+  filter(Pais %in% "Chile") |> 
+  filter(Tipo_de_evento == "Protestas") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Protestas = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+chile <-  chiled |> 
+  left_join(chilep)
+
+
+
+chilegraph <- ggplot(chile, aes(Mes)) + 
+  geom_line(aes(y = Disturbios, colour = "Disturbios"), size = 1.5) + 
+  geom_line(aes(y = Protestas, colour = "Protestas"), size = 1.5) +
+  labs(title = "Cantidad de manifestaciones por mes en Chile",
+       x = NULL,
+       y = "Cantidad",
+       color = "tipo:") +
+  scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
+  coord_cartesian(ylim=c(0,500))
+
+chilegraph <- chilegraph + 
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    panel.grid.major.y = element_line(color = "gray40"),
+    panel.grid.minor.y = element_line(color = "gray30"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  )
+chilegraph
+```
+
+```{r}
+#| echo: false
+#| warning: false
+colombiad <- datos_protestas %>% 
+  filter(Pais %in% "Colombia") |> 
+  filter(Tipo_de_evento == "Disturbios") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Disturbios = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+colombiap <- datos_protestas %>% 
+  filter(Pais %in% "Colombia") |> 
+  filter(Tipo_de_evento == "Protestas") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Protestas = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+colombia <-  colombiad |> 
+  left_join(colombiap)
+
+
+
+colombiagraph <- ggplot(colombia, aes(Mes)) + 
+  geom_line(aes(y = Disturbios, colour = "Disturbios"), size = 1.5) + 
+  geom_line(aes(y = Protestas, colour = "Protestas"), size = 1.5) +
+  labs(title = "Cantidad de manifestaciones por mes en Colombia",
+       x = NULL,
+       y = "Cantidad",
+       color = "tipo:") +
+  scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
+  coord_cartesian(ylim=c(0,700))
+
+colombiagraph <- colombiagraph + 
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    panel.grid.major.y = element_line(color = "gray40"),
+    panel.grid.minor.y = element_line(color = "gray30"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  )
+colombiagraph
+```
+
+```{r}
+#| echo: false
+#| warning: false
+venezuelad <- datos_protestas %>% 
+  filter(Pais %in% "Venezuela") |> 
+  filter(Tipo_de_evento == "Disturbios") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Disturbios = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+venezuelap <- datos_protestas %>% 
+  filter(Pais %in% "Venezuela") |> 
+  filter(Tipo_de_evento == "Protestas") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Protestas = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+venezuela <-  venezuelad |> 
+  left_join(venezuelap)
+
+
+
+venezuelagraph <- ggplot(venezuela, aes(Mes)) + 
+  geom_line(aes(y = Disturbios, colour = "Disturbios"), size = 1.5) + 
+  geom_line(aes(y = Protestas, colour = "Protestas"), size = 1.5) +
+  labs(title = "Cantidad de manifestaciones por mes en Venezuela",
+       x = NULL,
+       y = "Cantidad",
+       color = "tipo:") +
+  scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
+  coord_cartesian(ylim=c(0,500))
+
+venezuelagraph <- venezuelagraph + 
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    panel.grid.major.y = element_line(color = "gray40"),
+    panel.grid.minor.y = element_line(color = "gray30"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  )
+venezuelagraph
+```
+
+\*\* Si es que sí, sugerir que manifestaciones violentas y no violentas están intrísecamente conectadas entre sí, y a la vez con la cantidad de muertos.
+
+
+
+
+
+
+
+
+Como se puede observar en la Figura 1:
 
 En la figura anterior se muestra una serie de tiempo acerca de la cantidad de manifestaciones mensuales según lps estados sudamericanos. La disposición visual está enfocada en los países con mayor actividad, los cuales son: Argentina, Brasil, Chile, Colombia y Venezuela.
-
 
 ## Conclusión

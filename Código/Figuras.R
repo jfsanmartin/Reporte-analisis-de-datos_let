@@ -123,7 +123,7 @@ muerte1 <- datos_protestas |>
   group_by(Pais) |> 
   summarize(Muertos = sum(Muertos)) |> 
   arrange(desc(Muertos))
-  
+
 muerte1 |> 
   ggplot(aes(reorder(Pais, -Muertos), Muertos)) +
   geom_col(fill = "#00d1ae") +
@@ -212,11 +212,11 @@ chiled <- datos_protestas %>%
   filter(Tipo_de_evento == "Disturbios") |> 
   group_by(Mes, Pais) %>% 
   summarize(Disturbios = length(Tipo_de_evento))
-  
+
 chilep <- datos_protestas %>% 
   filter(Pais %in% "Chile") |> 
   filter(Tipo_de_evento == "Protestas") |> 
-group_by(Mes, Pais) %>% 
+  group_by(Mes, Pais) %>% 
   summarize(Protestas = length(Tipo_de_evento))
 
 chile <-  chiled |> 
@@ -400,6 +400,5 @@ venezuelagraph <- venezuelagraph +
   ) 
 
 ggsave("Figuras/grafico_5_4.png")
-
 
 
