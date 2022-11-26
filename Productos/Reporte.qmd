@@ -56,7 +56,6 @@ data.frame(Variables = names(datos_protestas),
              "temporal",
              "temporal",
              "cualitativa",
-             "cualitativa",
              "cuantitativa"
            ),
 	descripción = c(
@@ -64,7 +63,6 @@ data.frame(Variables = names(datos_protestas),
 		"Mes en que ocurrió el evento",
 		"Año en que ocurrió el evento",
 		"Evento de tipo protesta o disturbio",
-		"Escala nacional, subnacional u otros",
 		"Cantidad de muertos en el evento"
 		)) |>
 	gt()
@@ -97,7 +95,7 @@ showtext_auto()
 
 graph1 <- datos_protestas %>% 
   group_by(Mes, Pais) %>% 
-  summarize(cantidad = length(Escala),
+  summarize(cantidad = length(Tipo_de_evento),
             Mes = as.Date(Mes))
 
 hex <- hue_pal()(10)

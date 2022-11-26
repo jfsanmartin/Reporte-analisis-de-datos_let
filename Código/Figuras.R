@@ -18,7 +18,7 @@ showtext_auto()
 
 graph1 <- datos_protestas %>% 
   group_by(Mes, Pais) %>% 
-  summarize(cantidad = length(Escala))
+  summarize(cantidad = length(Tipo_de_evento))
 
 hex <- hue_pal()(10)
 hex[1] <- "#52fff1"
@@ -146,13 +146,13 @@ chiled <- datos_protestas %>%
   filter(Pais %in% "Chile") |> 
   filter(Tipo_de_evento == "Disturbios") |> 
   group_by(Mes, Pais) %>% 
-  summarize(Disturbios = length(Escala))
+  summarize(Disturbios = length(Tipo_de_evento))
   
 chilep <- datos_protestas %>% 
   filter(Pais %in% "Chile") |> 
   filter(Tipo_de_evento == "Protestas") |> 
 group_by(Mes, Pais) %>% 
-  summarize(Protestas = length(Escala))
+  summarize(Protestas = length(Tipo_de_evento))
 
 chile <-  chiled |> 
   left_join(chilep)
