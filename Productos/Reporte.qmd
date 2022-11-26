@@ -40,12 +40,15 @@ Este trabajo está basado, principlamente, en el trabajo realizado por el proyec
 Debido al tamaño y complejidad de esta tarea, y de la completa base de datos que entrega ACLED, por simplicidad se trabajó en este reporte con los datos sobre manifestaciones basados en países de Sudamérica. Las variables analizadas corresponden a: fecha de la manifestación, mes y año, desde el año 2018 hasta el 2022; tipo de evento, *riots* (disturbios) y *protests* para manifestaciones violentas y no violentas respectivamente; y cantidad de muertos en la manifestación como medida de violencia. En las siguientes secciones se encuentran el Desarrollo donde está el grueso del analísis con sus correspondientes resultados en gráficos de los datos, y la Conclusión que entrega las últimas reflexiones extraídas a partir de la información obtenida.
 
 ## Contexto/Antecedentes (quizás)
+** Explicar que a partir de 2018 comenzó un período de masivas protestas en latinoamérica
 
 ## Metodología
 
-## Resultados
-
-
+** Decir que los datos vienen de ACLED
+** Presentar qué es ACLED
+** Explicar que se agruparon todos los datos por Mes
+** Explicar que se escogieron datos entre abril 2018 y enero 2022
+** Presentar la tabla de variables y explicarlas un poco
 
 ```{r}
 #| echo: false
@@ -68,6 +71,25 @@ data.frame(Variables = names(datos_protestas),
 	gt()
 
 ```
+
+
+## Resultados
+** Presentar la serie temporal general a modo de una primera visualización del panorama general
+** Explicar que se escogen Brasil, Chile, Colombia y Venezuela por ser los países con mayor actividad. Y resaltar que Brasil está cortado porque llega a la cifra aproximada de 3500 manifestaciones
+** Presentar un gráfico de serie temporal pero con solo los países anteriores y con el eje y ajustado correctamente
+**Identificar los intervalos de tiempo (meses) de mayor cant de protestas para cada uno (esto luego se compará para ver si corresponde con los meses con más muertos)
+
+**Presentar gráfico sobre los países con más muertos y responder si corresponde con nuestra elección de países más violentos escogidos
+
+** Presentar gráfico de meses con más muertos por país (solo de los 4 países) y corroborar si corresponden con los intervalos de tiempo de peak de protestas. Notar que en ninguno de los peaks de Brasil corresponden con meses de gran cantidad de muertos.
+
+** Resaltar que en los momentos de mayor protestas es donde hay más muertos, por ende más violencia
+
+** Presentar 4 gráficos juntos, de cada país, que muestra cantidad de disturbio y protestas por separado y corroborar que en los 4 países existe correlación entre manifestaciones violentas y no violentas
+
+** Si es que sí, sugerir que manifestaciones violentas y no violentas están intrísecamente conectadas entre sí, y a la vez con la cantidad de muertos.
+
+
 
 Como se puede observar en la Figura 1:
 
