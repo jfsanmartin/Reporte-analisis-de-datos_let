@@ -43,9 +43,13 @@ Debido al tamaño y complejidad de esta tarea, y de la completa base de datos qu
 
 \*\* Explicar que a partir de 2018 comenzó un período de masivas protestas en latinoamérica
 
-## Metodología
+## Datos
 
-\*\* Decir que los datos vienen de ACLED \*\* Presentar qué es ACLED \*\* Explicar que se agruparon todos los datos por Mes \*\* Explicar que se escogieron datos entre abril 2018 y enero 2022 \*\* Presentar la tabla de variables y explicarlas un poco
+
+En este reporte toda la información proviene del proyecto de *Datos de Eventos y Ubicación de Conflictos Armados* (Armed Conflict Location & Event Data, [ACLED](https://acleddata.com/about-acled/)). Este consiste en un proyecto de recolección de datos desagregados sobre fechas, actores, localizaciones, muertes y todo tipo de reportes sobre violencia política y eventos de protestas alrededor del mundo. 
+
+
+Los datos escogidos consisten en que: sean países de Sudamérica (sin contar Suriname, Guyana y Guayana Francesa), cuya fecha se halle entre Abril de 2018 y Enero de 2022 y que los eventos sean *protestas* o *disturbios*. No se les realizó ninguna transformación a los datos. A continuación se muestra en la Tabla 1 las variables escogidas para el análisis:
 
 ```{r}
 #| echo: false
@@ -65,13 +69,18 @@ data.frame(Variables = names(datos_protestas),
 		"Evento de tipo protesta o disturbio",
 		"Cantidad de muertos en el evento"
 		)) |>
-	gt()
+	gt() |> 
+  tab_header(title = "Tabla 1")
 
 ```
+
+Cada dato es un evento con las variables mostradas anteriormente. Se desecha la variable sobre el día del evento debido a su poca relevancia en el análisis, ya que será más importante agrupar los eventos según el mes y año en que ocurrieron. La variable *Tipo de evento*, de tipo cualitativa, consiste en precisar si fue una *protesta* o un *disturbio*, cuya diferencia, en este contexto, radica en que el disturbio es un tipo de protesta que deviene en *violenta*, ya sea por uso de armas, destrucción de propiedad, entre otros.
 
 ## Resultados
 
 \*\* Presentar la serie temporal general a modo de una primera visualización del panorama general
+
+Primero es necesario tener una visión general sobre la cantidad de manifestaciones a través del intervalo de tiempo escogido para el análisis (abril de 2018 hasta enero 2022), por lo que se muestra una serie temporal sobre esto en la Figura 1:
 
 ```{r}
 #| echo: false
@@ -151,7 +160,8 @@ graph11 +
     axis.ticks = element_line(size = 1)
   ) 
 ```
-\*\* Explicar que se escogen Brasil, Chile, Colombia y Venezuela por ser los países con mayor actividad. Y resaltar que Brasil está cortado porque llega a la cifra aproximada de 3500 manifestaciones
+
+Se puede observar con un color difuminado a los países con baja actividad de manifestaciones. En cambio es de notar países que resaltan su alta actividad como lo son Brasil, Chile, Colombia y Venezuela. Es debido a esto que para uso de este análisis se trabajará sólo con estos cuatro países. A continuación se muestra la misma serie temporal, pero solo para los países escogidos, en la Figura 2:
 
 \*\* Presentar un gráfico de serie temporal pero con solo los países anteriores y con el eje y ajustado correctamente
 
@@ -194,7 +204,7 @@ graph11 <- graph1 |>
   geom_line(size = 1.5) +
   #scale_color_colorblind() +
   scale_color_manual(values = hex) +
-  labs(title = "Cantidad de manifestaciones por mes",
+  labs(title = "Figura 2: Cantidad de manifestaciones por mes",
        x = NULL,
        y = "Cantidad de manifestaciones",
        color = "país") +
@@ -224,6 +234,21 @@ graph11 +
   )
 ```
 
+Es de notar que para este gráfico, y el anterior, en Mayo de 2018 Brasil tiene un peak de manifestaciones que no se alcanza a apreciar, debido a su magnitud de aproximadamente 3500 manifestaciones. Para este mismo país, además, podemos observar peaks de manifestaciones en Mayo de 2019, y Septiembre de 2021. En el caso de Chile observamos un peak para Octubre de 2019. Para Colombia en Mayo de 2021. Y para Venezuela en Octubre de 2020. A continuación se recopila lo anterior en la Tabla 2:
+
+```{r}
+#| echo: false
+peaks <- data.frame(Pais = c("Brasil", "Brasil","Brasil", "Chile", "Colombia", "Venezuela"), fecha = c("Mayo de 2018", "Mayo de 2019", "Septiembre de 2021", "Octubre de 2019", "Mayo de 2021", "Octubre de 2020"))
+
+peaks |> 
+  gt() |> 
+  tab_header(title = "Tabla 2: Meses con mayores peaks de manifestaciones por país",
+             subtitle = "Para Brasil, Chile, Colombia y Venezuela")
+```
+
+Lo anterior se utilizará para comparar si corresponde con los meses con mayor cantidad de muertos. Sin embargo, se mostrará primero un gráfico sobre los países con mayores cantidad de muertos en manifestaciones en el intervalo de tiempo trabajado, en la Figura 3
+
+
 \*\*Identificar los intervalos de tiempo (meses) de mayor cant de protestas para cada uno (esto luego se compará para ver si corresponde con los meses con más muertos)
 
 \*\*Presentar gráfico sobre los países con más muertos y responder si corresponde con nuestra elección de países más violentos escogidos
@@ -245,7 +270,7 @@ muerte1 |>
             size = 7,
             color = "white",
             fontface = "bold") +
-  labs(title = "Cantidad de muertos en manifestaciones por país",
+  labs(title = "Figura 3: Cantidad de muertos en manifestaciones por país",
        subtitle = "entre 2018 y 2021",
        x = NULL,
        y = "Muertes") +
@@ -267,7 +292,11 @@ muerte1 |>
   )
 ```
 
+Se puede observar como los países con mayor cantidad de muertos en manifestaciones corresponden a los países escogidos anteriormente. Lo que nos puede indicar una correlación entre alta actividad de manifestaciones y la violencia de estas (en este caso con fallecidos).
+
 \*\* Presentar gráfico de meses con más muertos por país (solo de los 4 países) y corroborar si corresponden con los intervalos de tiempo de peak de protestas. Notar que en ninguno de los peaks de Brasil corresponden con meses de gran cantidad de muertos.
+
+A continuación se muestra un gráfico sobre los meses con mayor cantidad de muertos en manifestaciones, con respecto a los cuatro países escogidos, en la Figura 4:
 
 ```{r}
 #| echo: false
@@ -292,7 +321,7 @@ muerte2 |>
             size = 7,
             color = "white",
             fontface = "bold") +
-  labs(title = "Cantidad de muertos en manifestaciones agrupados por mes y país",
+  labs(title = "Figura 4: Meses con mayor cantidad de muertos en manifestaciones por país",
        subtitle = "entre 2018 y 2021",
        x = NULL,
        y = "Cantidad de muertos") +
@@ -314,9 +343,15 @@ muerte2 |>
   )
 ```
 
+Se puede observar que Venezuela tiene los meses más violentos, sin embargo, niguno corresponde al mes con mayor cantidad de manifestaciones (octubre de 2020). Con Brasil es más fuerte aún el fenómeno porque es claramente el país con más grandes peaks de manifestaciones, pero ninguno corresponde con los meses más violentos. Para Chile y Colombia sí se puede observar que sus peaks de manifestaciones sí corresponden con meses violentos. Esto parece indicar, al contrario que con la Figura 3, que grandes cantidades de manifestaciones no implican necesariamente grandes aumentos en la violencia de estas (violencia en el sentido de fallecidos).
+
+
+
 \*\* Resaltar que en los momentos de mayor protestas es donde hay más muertos, por ende más violencia
 
 \*\* Presentar 4 gráficos juntos, de cada país, que muestra cantidad de disturbio y protestas por separado y corroborar que en los 4 países existe correlación entre manifestaciones violentas y no violentas
+
+A continuación se presentan 4 series temporales, cada uno correspondientes a los oaíses escogidos, que muestran la cantidad de manifestaciones desagrupados por el tipo de estas: disturbios o protestas.
 
 ```{r}
 #| echo: false
@@ -343,7 +378,7 @@ brazil <-  brazild |>
 brazilgraph <- ggplot(brazil, aes(Mes)) + 
   geom_line(aes(y = Disturbios, colour = "Disturbios"), size = 1.5) + 
   geom_line(aes(y = Protestas, colour = "Protestas"), size = 1.5) +
-  labs(title = "Cantidad de manifestaciones por mes en Brazil",
+  labs(title = "Figura 5.1: Cantidad de manifestaciones por mes en Brazil",
        x = NULL,
        y = "Cantidad",
        color = "tipo:") +
@@ -399,7 +434,7 @@ chile <-  chiled |>
 chilegraph <- ggplot(chile, aes(Mes)) + 
   geom_line(aes(y = Disturbios, colour = "Disturbios"), size = 1.5) + 
   geom_line(aes(y = Protestas, colour = "Protestas"), size = 1.5) +
-  labs(title = "Cantidad de manifestaciones por mes en Chile",
+  labs(title = "Figura 5.2: Cantidad de manifestaciones por mes en Chile",
        x = NULL,
        y = "Cantidad",
        color = "tipo:") +
@@ -452,7 +487,7 @@ colombia <-  colombiad |>
 colombiagraph <- ggplot(colombia, aes(Mes)) + 
   geom_line(aes(y = Disturbios, colour = "Disturbios"), size = 1.5) + 
   geom_line(aes(y = Protestas, colour = "Protestas"), size = 1.5) +
-  labs(title = "Cantidad de manifestaciones por mes en Colombia",
+  labs(title = "Figura 5.3: Cantidad de manifestaciones por mes en Colombia",
        x = NULL,
        y = "Cantidad",
        color = "tipo:") +
@@ -505,7 +540,7 @@ venezuela <-  venezuelad |>
 venezuelagraph <- ggplot(venezuela, aes(Mes)) + 
   geom_line(aes(y = Disturbios, colour = "Disturbios"), size = 1.5) + 
   geom_line(aes(y = Protestas, colour = "Protestas"), size = 1.5) +
-  labs(title = "Cantidad de manifestaciones por mes en Venezuela",
+  labs(title = "Figura 5.4: Cantidad de manifestaciones por mes en Venezuela",
        x = NULL,
        y = "Cantidad",
        color = "tipo:") +
@@ -532,6 +567,9 @@ venezuelagraph <- venezuelagraph +
   )
 venezuelagraph
 ```
+
+Considerando que los disturbios, a diferencias de las protestas,  son tipos de manifestaciones con altos grados de violencia, se tiene que, al igual que en la Figura 4, para Chile y Colombia existe una correlación entre protestas y hechos de violencia (en este caso disturbios). En cambio para Brasil y Venezuela se repite el fenómeno de la falta de correlación entre estas. Estas discrepancias entre países como Chile y Colombia con respecto a Brasil y Venezuela no nos permiten concluir si existe una fuerte dependencia entre masivas protestas y hechos de violencia. Sino que quizás sea necesario encontrar más información o agregar más variables para obtener un resultado más concluyente.
+
 
 \*\* Si es que sí, sugerir que manifestaciones violentas y no violentas están intrísecamente conectadas entre sí, y a la vez con la cantidad de muertos.
 
