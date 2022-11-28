@@ -1,5 +1,5 @@
 ---
-title: "Reporte sobre análisis de protestas sociales en Sudamérica"
+title: "Reporte sobre análisis de protestas sociales y su violencia en Sudamérica"
 author: "Jorge San Martín"
 format: html
 editor: visual
@@ -29,24 +29,24 @@ datos_protestas <- read.csv(here::here("Datos/datos-protestas.csv"))
 
 ## Resumen
 
+Durante los últimos años en sudamérica han ocurrido fenómenos de masivas protestas sociales, que han llegado a denominarse "estallidos sociales". Con el fin hallar relaciones de dependencia entre estos fenómenos y hechos de violencia se ha analizado la base de datos de *ACLED* sobre manifestaciones en sudamérica durante los últimos cuatro años. Los resultados muestran que se han hallado posibles relaciones de dependencia, pero, no para la mayoría de los países, por lo que no se han podido afirmar resultados concluyentes. Por esto se sugiere que es necesario ampliar las bases de datos para proseguir con las investigaciones.
+
 ## Introducción
 
-Durante el año 2019, Chile se vió inmerso en una serie de masivas y violentas protestas a nivel nacional que conmocionaron al país, teniendo importantes consecuencias a nivel político y social; situación que acabó por denominarse "Estallido social". Sin embargo, Chile no fue el único país latinoamericano envuelto en masivas protestas durante los últimos años. También experimentaron estallidos países como Ecuador el 2019, Colombia el 2019-2020, Perú el 2020, entre otros. Esto nos indica que las masivas protestas sociales del último tiempo han sido un fenómeno que ha permeado el subcontinente latinoamericano.
+Durante el año 2019 Chile se vió inmerso en una serie de masivas y violentas protestas a nivel nacional que conmocionaron al país, lo que tuvo importantes consecuencias a nivel político y social. Esta situación acabó por denominarse "Estallido social". Sin embargo, Chile no fue el único país latinoamericano envuelto en masivas protestas durante los últimos años. También experimentaron estallidos países como Colombia en 2019-2020, Perú en 2020, entre otros. Esto nos indica que las masivas protestas sociales del último tiempo han sido un fenómeno que ha permeado el subcontinente latinoamericano.
 
-Sin embargo, este fenómeno no ha sido homogéneo en los distintos países involucrados; hay diferencias remarcables, como la masividad, duración temporal y la violencia de estas protestas, que pueden ser de interés para futuros análisis de carácter sociológico, político, económico, etc... Es debido a esto el posible valor de analizar las características que diferencian estos fenómenos de masivas protestas en sudamérica en los últimos cuatro años.
+Sin embargo, este fenómeno no ha sido homogéneo en los distintos países involucrados; hay diferencias remarcables, como la masividad, duración temporal y la violencia de estas protestas. Estas pueden ser de interés para futuros análisis de carácter sociológico, político, económico, u otros. Es debido a esto el posible valor de analizar las características que diferencian estos fenómenos de masivas protestas en sudamérica en los últimos cuatro años.
 
-Este trabajo está basado, principlamente, en el trabajo realizado por el proyecto *Armed Conflict Location & Event Data Project* (ACLED) que recopila información sobre fechas, actores, lugares, muertes y todo tipo de eventos de violencia y protesta política en todo el mundo. El reporte busca analizar cuantitativamente, entre países, las diferencias en la cantidad de manifestaciones, su duración temporal y sus niveles de violencia, para armar un panorama general y específico sobre el fenómeno de las masivas protestas sociales de los últimos años.
+Este reporte busca analizar cuantitativamente, para países de sudamérica en los últimos años, la relación entre masivas protestas sociales y los niveles de violencia de estas, con el fin de dilucidar si existe una dependencia, y en qué medida, entre ambos fenómenos. El reporte está basado, principlamente, en el trabajo realizado por el proyecto *Armed Conflict Location & Event Data Project* (ACLED) que recopila información sobre fechas, actores, lugares, muertes y todo tipo de eventos de violencia y protesta política en todo el mundo. 
 
-Debido al tamaño y complejidad de esta tarea, y de la completa base de datos que entrega ACLED, por simplicidad se trabajó en este reporte con los datos sobre manifestaciones basados en países de Sudamérica. Las variables analizadas corresponden a: fecha de la manifestación, mes y año, desde el año 2018 hasta el 2022; tipo de evento, *riots* (disturbios) y *protests* para manifestaciones violentas y no violentas respectivamente; y cantidad de muertos en la manifestación como medida de violencia. En las siguientes secciones se encuentran el Desarrollo donde está el grueso del analísis con sus correspondientes resultados en gráficos de los datos, y la Conclusión que entrega las últimas reflexiones extraídas a partir de la información obtenida.
+En el reporte se siguen las secciones: *Datos*, donde se explicarán con detalle la fuente, las características y el uso de los datos; *Resultados*, donde se mostrará gráficamente un panorama general sobre las protestas en sudamérica en los últimos año, luego se escogerán los países con mayor actividad de este tipo, y para estos se realizarán análisis descriptivos sobre violencia a partir de gráficos acerca de tipos de manifestaciones y fallecidos en estas; y para finalizar, la sección de *Conclusión*, donde se resumirán los resultados y se darán recomendaciones.
 
-## Contexto/Antecedentes (quizás)
 
-\*\* Explicar que a partir de 2018 comenzó un período de masivas protestas en latinoamérica
 
 ## Datos
 
 
-En este reporte toda la información proviene del proyecto de *Datos de Eventos y Ubicación de Conflictos Armados* (Armed Conflict Location & Event Data, [ACLED](https://acleddata.com/about-acled/)). Este consiste en un proyecto de recolección de datos desagregados sobre fechas, actores, localizaciones, muertes y todo tipo de reportes sobre violencia política y eventos de protestas alrededor del mundo. 
+En este reporte toda la información proviene del proyecto *Datos de Eventos y Ubicación de Conflictos Armados* (Armed Conflict Location & Event Data, [ACLED](https://acleddata.com/about-acled/)). Este consiste en un proyecto de recolección de datos desagregados sobre fechas, actores, localizaciones, muertes y todo tipo de reportes sobre violencia política y eventos de protestas alrededor del mundo. 
 
 
 Los datos escogidos consisten en que: sean países de Sudamérica (sin contar Suriname, Guyana y Guayana Francesa), cuya fecha se halle entre Abril de 2018 y Enero de 2022 y que los eventos sean *protestas* o *disturbios*. No se les realizó ninguna transformación a los datos. A continuación se muestra en la Tabla 1 las variables escogidas para el análisis:
@@ -74,11 +74,11 @@ data.frame(Variables = names(datos_protestas),
 
 ```
 
-Cada dato es un evento con las variables mostradas anteriormente. Se desecha la variable sobre el día del evento debido a su poca relevancia en el análisis, ya que será más importante agrupar los eventos según el mes y año en que ocurrieron. La variable *Tipo de evento*, de tipo cualitativa, consiste en precisar si fue una *protesta* o un *disturbio*, cuya diferencia, en este contexto, radica en que el disturbio es un tipo de protesta que deviene en *violenta*, ya sea por uso de armas, destrucción de propiedad, entre otros.
+Cada dato corresponde a un evento con las variables mostradas anteriormente. Se desecha la variable sobre el día del evento debido a su poca relevancia en el análisis, ya que será más importante agrupar los eventos según el mes y año en que ocurrieron. La variable *Tipo de evento*, de tipo cualitativa, consiste en precisar si fue una *protesta* o un *disturbio*, cuya diferencia, en este contexto, radica en que el disturbio es un tipo de protesta que deviene en *violenta*, ya sea por uso de armas, destrucción de propiedad, entre otros.
 
 ## Resultados
 
-\*\* Presentar la serie temporal general a modo de una primera visualización del panorama general
+
 
 Primero es necesario tener una visión general sobre la cantidad de manifestaciones a través del intervalo de tiempo escogido para el análisis (abril de 2018 hasta enero 2022), por lo que se muestra una serie temporal sobre esto en la Figura 1:
 
@@ -161,9 +161,9 @@ graph11 +
   ) 
 ```
 
-Se puede observar con un color difuminado a los países con baja actividad de manifestaciones. En cambio es de notar países que resaltan su alta actividad como lo son Brasil, Chile, Colombia y Venezuela. Es debido a esto que para uso de este análisis se trabajará sólo con estos cuatro países. A continuación se muestra la misma serie temporal, pero solo para los países escogidos, en la Figura 2:
+Se puede observar con un color difuminado a los países con baja actividad de manifestaciones. En cambio es de notar países que resaltan su alta actividad como lo son Brasil, Chile, Colombia y Venezuela. Es por esto que para uso de este análisis se trabajará sólo con estos cuatro países. A continuación se muestra la misma serie temporal, pero solo para los países escogidos, en la Figura 2:
 
-\*\* Presentar un gráfico de serie temporal pero con solo los países anteriores y con el eje y ajustado correctamente
+
 
 ```{r}
 #| echo: false
@@ -246,12 +246,10 @@ peaks |>
              subtitle = "Para Brasil, Chile, Colombia y Venezuela")
 ```
 
-Lo anterior se utilizará para comparar si corresponde con los meses con mayor cantidad de muertos. Sin embargo, se mostrará primero un gráfico sobre los países con mayores cantidad de muertos en manifestaciones en el intervalo de tiempo trabajado, en la Figura 3
+Lo anterior se utilizará para comparar si corresponde con los meses con mayor cantidad de muertos. Sin embargo, antes se mostrará un gráfico sobre los países con mayores cantidad de muertos en manifestaciones en el intervalo de tiempo trabajado, en la Figura 3:
 
 
-\*\*Identificar los intervalos de tiempo (meses) de mayor cant de protestas para cada uno (esto luego se compará para ver si corresponde con los meses con más muertos)
 
-\*\*Presentar gráfico sobre los países con más muertos y responder si corresponde con nuestra elección de países más violentos escogidos
 
 ```{r}
 #| echo: false
@@ -294,7 +292,7 @@ muerte1 |>
 
 Se puede observar como los países con mayor cantidad de muertos en manifestaciones corresponden a los países escogidos anteriormente. Lo que nos puede indicar una correlación entre alta actividad de manifestaciones y la violencia de estas (en este caso con fallecidos).
 
-\*\* Presentar gráfico de meses con más muertos por país (solo de los 4 países) y corroborar si corresponden con los intervalos de tiempo de peak de protestas. Notar que en ninguno de los peaks de Brasil corresponden con meses de gran cantidad de muertos.
+
 
 A continuación se muestra un gráfico sobre los meses con mayor cantidad de muertos en manifestaciones, con respecto a los cuatro países escogidos, en la Figura 4:
 
@@ -343,15 +341,13 @@ muerte2 |>
   )
 ```
 
-Se puede observar que Venezuela tiene los meses más violentos, sin embargo, niguno corresponde al mes con mayor cantidad de manifestaciones (octubre de 2020). Con Brasil es más fuerte aún el fenómeno porque es claramente el país con más grandes peaks de manifestaciones, pero ninguno corresponde con los meses más violentos. Para Chile y Colombia sí se puede observar que sus peaks de manifestaciones sí corresponden con meses violentos. Esto parece indicar, al contrario que con la Figura 3, que grandes cantidades de manifestaciones no implican necesariamente grandes aumentos en la violencia de estas (violencia en el sentido de fallecidos).
+Se puede observar que Venezuela tiene los meses más violentos, sin embargo, ninguno corresponde al mes con mayor cantidad de manifestaciones (octubre de 2020). Con Brasil es más fuerte aún el fenómeno porque es claramente el país con más grandes peaks de manifestaciones, pero ninguno corresponde con los meses más violentos. Esto parece indicar, al contrario que con la Figura 3, que grandes cantidades de manifestaciones no implican necesariamente grandes aumentos en la violencia de estas (violencia en el sentido de fallecidos). Para Chile y Colombia sí se puede observar que sus peaks de manifestaciones efectivamente corresponden con meses violentos.
 
 
 
-\*\* Resaltar que en los momentos de mayor protestas es donde hay más muertos, por ende más violencia
 
-\*\* Presentar 4 gráficos juntos, de cada país, que muestra cantidad de disturbio y protestas por separado y corroborar que en los 4 países existe correlación entre manifestaciones violentas y no violentas
 
-A continuación se presentan 4 series temporales, cada uno correspondientes a los oaíses escogidos, que muestran la cantidad de manifestaciones desagrupados por el tipo de estas: disturbios o protestas.
+A continuación se presentan 4 series temporales, cada uno correspondientes a los países escogidos, que muestran la cantidad de manifestaciones desagrupados por el tipo de estas: disturbios o protestas.
 
 ```{r}
 #| echo: false
@@ -568,20 +564,19 @@ venezuelagraph <- venezuelagraph +
 venezuelagraph
 ```
 
-Considerando que los disturbios, a diferencias de las protestas,  son tipos de manifestaciones con altos grados de violencia, se tiene que, al igual que en la Figura 4, para Chile y Colombia existe una correlación entre protestas y hechos de violencia (en este caso disturbios). En cambio para Brasil y Venezuela se repite el fenómeno de la falta de correlación entre estas. Estas discrepancias entre países como Chile y Colombia con respecto a Brasil y Venezuela no nos permiten concluir si existe una fuerte dependencia entre masivas protestas y hechos de violencia. Sino que quizás sea necesario encontrar más información o agregar más variables para obtener un resultado más concluyente.
-
-
-\*\* Si es que sí, sugerir que manifestaciones violentas y no violentas están intrísecamente conectadas entre sí, y a la vez con la cantidad de muertos.
+Considerando que los disturbios, a diferencia de las protestas,  son tipos de manifestaciones con altos grados de violencia, se tiene que, al igual que en la Figura 4, para Chile y Colombia existe una correlación entre protestas y hechos de violencia (en este caso disturbios). En cambio para Brasil y Venezuela se repite el fenómeno de la falta de correlación entre estas. Tales discrepancias entre países como Chile y Colombia con respecto a Brasil y Venezuela no nos permiten estimar si existe una dependencia entre masivas protestas y hechos de violencia con la información actual.
 
 
 
-
-
-
-
-
-Como se puede observar en la Figura 1:
-
-En la figura anterior se muestra una serie de tiempo acerca de la cantidad de manifestaciones mensuales según lps estados sudamericanos. La disposición visual está enfocada en los países con mayor actividad, los cuales son: Argentina, Brasil, Chile, Colombia y Venezuela.
 
 ## Conclusión
+
+Como se ha mostrado en este reporte los últimos años se han caracterizado por el fenómeno de gran cantidad de protestas sociales en países de sudamérica. Se han encontrado claras correlaciones entre manifestaciones masivas y hechos de violencia en estas, para algunos casos. Sin embargo, para otros no se han logrado hallar o estas no existen.
+
+Es debido a lo anterior que no sea posible obtener resultados concluyentes a partir de los datos analizados. Lo que indica que para encontrar una posible dependencia entre fenómenos de grandes manifestaciones y hechos de violencia, quizás sea necesario hallar mayor información, ya sea al agregar nuevas variables o incluso incluir nuevas bases de datos, y probablemente no sólo de sudamérica. 
+
+El contexto de estos últimos años otorga una gran oportunidad para análisis de este tipo debido a la gran cantidad de datos que ha sido posible recopilar. Es por esto que se sugiere continuar con estas investigaciones, con nuevas bases de datos y nuevas variables para poder identificar posibles dependencias entre protestas sociales y hechos de violencia.
+
+
+
+
