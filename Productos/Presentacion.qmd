@@ -12,6 +12,52 @@ self-contained: true
 
 ## Fuente de los datos {background-image="https://pbs.twimg.com/card_img/1594626347762126848/8BQhNFIT?format=jpg&name=small"}
 
+## Fuente de los datos
+
+::: {.panel-tabset}
+
+### Variables
+
+```{r}
+#| echo: false
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(dslabs)
+library(showtext)
+library(ggthemes)
+library(scales)
+library(ggtext) # para editar anotaciones y etiquetas
+library(gghighlight) # para destacar valores en un gráfico
+library(here)
+library(gt)
+datos_protestas <- read.csv(here::here("Datos/datos-protestas.csv"))
+
+data.frame(Variables = names(datos_protestas),
+           tipo = c(
+             "cualitativa",
+             "temporal",
+             "temporal",
+             "cualitativa",
+             "cuantitativa"
+           ),
+	descripción = c(
+		"País donde ocurrió el evento",
+		"Mes en que ocurrió el evento",
+		"Año en que ocurrió el evento",
+		"Evento de tipo protesta o disturbio",
+		"Cantidad de muertos en el evento"
+		)) |>
+	gt::gt()
+
+```
+
+
+
+:::
+
+
 ## Resultados
 
 ```{r}
@@ -162,6 +208,236 @@ graph11 +
     panel.background = element_blank(),
     axis.ticks = element_line(size = 1)
   )
+```
+
+
+------------------------------------------------------------------------
+
+Cantidad de manifestaciones por mes en Brasil, Chile, Colombia y Venezuela, respectivamente
+
+```{r}
+#| echo: false
+#| warning: false
+brazild <- datos_protestas %>% 
+  filter(Pais %in% "Brazil") |> 
+  filter(Tipo_de_evento == "Disturbios") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Disturbios = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+brazilp <- datos_protestas %>% 
+  filter(Pais %in% "Brazil") |> 
+  filter(Tipo_de_evento == "Protestas") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Protestas = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+brazil <-  brazild |> 
+  left_join(brazilp)
+
+
+
+brazilgraph <- ggplot(brazil, aes(Mes)) + 
+  geom_line(aes(y = Disturbios, colour = "Disturbios"), size = 1.5) + 
+  geom_line(aes(y = Protestas, colour = "Protestas"), size = 1.5) +
+  labs(x = NULL,
+       y = "Cantidad",
+       color = "tipo:") +
+  scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
+  coord_cartesian(ylim=c(0,1000))
+
+brazilgraph <- brazilgraph + 
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "right",
+    legend.justification = "left",
+    legend.text = element_text(size = 60),
+    panel.grid.major.y = element_line(color = "gray40"),
+    panel.grid.minor.y = element_line(color = "gray30"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  )
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+font_add_google(name = "Lato", family = "Lato")
+showtext_auto()
+
+chiled <- datos_protestas %>% 
+  filter(Pais %in% "Chile") |> 
+  filter(Tipo_de_evento == "Disturbios") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Disturbios = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+chilep <- datos_protestas %>% 
+  filter(Pais %in% "Chile") |> 
+  filter(Tipo_de_evento == "Protestas") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Protestas = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+chile <-  chiled |> 
+  left_join(chilep)
+
+
+
+chilegraph <- ggplot(chile, aes(Mes)) + 
+  geom_line(aes(y = Disturbios, colour = "Disturbios"), size = 1.5) + 
+  geom_line(aes(y = Protestas, colour = "Protestas"), size = 1.5) +
+  labs(x = NULL,
+       y = "Cantidad",
+       color = "tipo:") +
+  scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
+  coord_cartesian(ylim=c(0,500))
+
+chilegraph <- chilegraph + 
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    panel.grid.major.y = element_line(color = "gray40"),
+    panel.grid.minor.y = element_line(color = "gray30"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  ) +
+  theme(legend.position = "none")
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+colombiad <- datos_protestas %>% 
+  filter(Pais %in% "Colombia") |> 
+  filter(Tipo_de_evento == "Disturbios") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Disturbios = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+colombiap <- datos_protestas %>% 
+  filter(Pais %in% "Colombia") |> 
+  filter(Tipo_de_evento == "Protestas") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Protestas = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+colombia <-  colombiad |> 
+  left_join(colombiap)
+
+
+
+colombiagraph <- ggplot(colombia, aes(Mes)) + 
+  geom_line(aes(y = Disturbios, colour = "Disturbios"), size = 1.5) + 
+  geom_line(aes(y = Protestas, colour = "Protestas"), size = 1.5) +
+  labs(x = NULL,
+       y = "Cantidad",
+       color = "tipo:") +
+  scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
+  coord_cartesian(ylim=c(0,700))
+
+colombiagraph <- colombiagraph + 
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    panel.grid.major.y = element_line(color = "gray40"),
+    panel.grid.minor.y = element_line(color = "gray30"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  ) + 
+  theme(legend.position = "none")
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+venezuelad <- datos_protestas %>% 
+  filter(Pais %in% "Venezuela") |> 
+  filter(Tipo_de_evento == "Disturbios") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Disturbios = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+venezuelap <- datos_protestas %>% 
+  filter(Pais %in% "Venezuela") |> 
+  filter(Tipo_de_evento == "Protestas") |> 
+  group_by(Mes, Pais) %>% 
+  summarize(Protestas = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+venezuela <-  venezuelad |> 
+  left_join(venezuelap)
+
+
+
+venezuelagraph <- ggplot(venezuela, aes(Mes)) + 
+  geom_line(aes(y = Disturbios, colour = "Disturbios"), size = 1.5) + 
+  geom_line(aes(y = Protestas, colour = "Protestas"), size = 1.5) +
+  labs(x = NULL,
+       y = "Cantidad",
+       color = "tipo:") +
+  scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
+  coord_cartesian(ylim=c(0,500))
+
+venezuelagraph <- venezuelagraph + 
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    panel.grid.major.y = element_line(color = "gray40"),
+    panel.grid.minor.y = element_line(color = "gray30"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  ) + 
+  theme(legend.position = "none")
+
+```
+
+``` {r}
+#| echo: false
+#| warning: false
+#| layout-ncol: 2
+#| layout-nrow: 2
+brazilgraph
+chilegraph
+colombiagraph
+venezuelagraph
 ```
 
 ## Conclusiones
