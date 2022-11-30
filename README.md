@@ -2,6 +2,8 @@
 
 Link al reporte: https://jfsanmartin.github.io/Reporte-analisis-de-datos_let/Productos/Reporte.html
 
+Link a la presentación: https://jfsanmartin.github.io/Reporte-analisis-de-datos_let/Productos/Presentacion.html
+
 ## Resumen
 
 Durante los últimos años en sudamérica han ocurrido fenómenos de masivas protestas sociales, que han llegado a denominarse "estallidos sociales". Con el fin hallar relaciones de dependencia entre estos fenómenos y hechos de violencia se ha analizado la base de datos de *ACLED* sobre manifestaciones en sudamérica durante los últimos cuatro años. Los resultados muestran que se han hallado posibles relaciones de dependencia, pero, no para la mayoría de los países, por lo que no se han podido afirmar resultados concluyentes. Por esto se sugiere que es necesario ampliar las bases de datos para proseguir con las investigaciones.
