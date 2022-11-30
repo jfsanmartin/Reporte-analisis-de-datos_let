@@ -1,0 +1,167 @@
+---
+title: "Reporte sobre análisis de protestas sociales y su violencia en Sudamérica"
+author: "Jorge San Martín"
+format: revealjs
+editor: visual
+self-contained: true
+---
+
+## Contexto {background-color="black" background-image="https://www.amnesty.org/es/wp-content/uploads/2021/09/278410-scaled.jpg"}
+
+## Relevancia {background-color="black" background-image="https://imagenes.elpais.com/resizer/kqEIYryfCnonsb70yeQVsUGh4Os=/1960x1103/cloudfront-eu-central-1.images.arcpublishing.com/prisa/YNNZIDZB6EMNVVAE2OXSFF5YXQ.jpg"}
+
+## Fuente de los datos {background-image="https://pbs.twimg.com/card_img/1594626347762126848/8BQhNFIT?format=jpg&name=small"}
+
+## Resultados
+
+```{r}
+#| echo: false
+#| output: false
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(dslabs)
+library(showtext)
+library(ggthemes)
+library(scales)
+library(ggtext) # para editar anotaciones y etiquetas
+library(gghighlight) # para destacar valores en un gráfico
+library(here)
+Sys.setlocale("LC_TIME", "English")
+#datos_protestas <- read_csv("Datos/datos-protestas.csv")
+datos_protestas <- read.csv(here::here("Datos/datos-protestas.csv"))
+# Grafico 1 ----
+
+font_add_google(name = "Lato", family = "Lato")
+showtext_auto()
+
+graph1 <- datos_protestas %>% 
+  group_by(Mes, Pais) %>% 
+  summarize(cantidad = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+hex <- hue_pal()(10)
+hex[1] <- "#52fff1"
+hex[3] <- "#00ab1f"
+hex[4] <- "#ff4545"
+hex[5] <- "#fff305"
+hex[7] <- "#0000FF33"
+hex[8] <- "#9999FF33"
+hex[9] <- "#FF33E633"
+hex[2] <- "#FFB38033"
+hex[6] <- "#00B3B333"
+
+graph11 <- graph1 |> 
+  filter(Pais %in% c("Chile", "Argentina", "Peru", "Bolivia", "Ecuador",
+                     "Colombia", "Venezuela", "Uruguay", "Paraguay", "Brazil")) |> 
+  ggplot(aes(Mes, cantidad, color = Pais)) +
+  geom_line(size = 1.5) +
+  #scale_color_colorblind() +
+  scale_color_manual(values = hex) +
+  labs(title = "Cantidad de manifestaciones por mes",
+       x = NULL,
+       y = "Cantidad de manifestaciones",
+       color = "país") +
+  scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
+  coord_cartesian(ylim=c(0,1000))
+
+
+
+
+```
+
+```{r}
+#| echo: false
+graph11 + 
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 40),
+    panel.grid.major.y = element_line(color = "gray40"),
+    panel.grid.minor.y = element_line(color = "gray30"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  ) 
+```
+
+## Resultados
+
+```{r}
+#| echo: false
+#| output: false
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(dslabs)
+library(showtext)
+library(ggthemes)
+library(scales)
+library(ggtext) # para editar anotaciones y etiquetas
+library(gghighlight) # para destacar valores en un gráfico
+library(here)
+Sys.setlocale("LC_TIME", "English")
+#datos_protestas <- read_csv("Datos/datos-protestas.csv")
+datos_protestas <- read.csv(here::here("Datos/datos-protestas.csv"))
+font_add_google(name = "Lato", family = "Lato")
+showtext_auto()
+
+graph1 <- datos_protestas %>% 
+  group_by(Mes, Pais) %>% 
+  summarize(cantidad = length(Tipo_de_evento),
+            Mes = as.Date(Mes))
+
+hex <- hue_pal()(10)
+hex[1] <- "#00ab1f"
+hex[2] <- "#ff4545"
+hex[3] <- "#fff305"
+hex[4] <- "#FF62BC"
+
+
+graph11 <- graph1 |> 
+  filter(Pais %in% c("Chile",
+                     "Colombia", "Venezuela", "Brazil")) |> 
+  ggplot(aes(Mes, cantidad, color = Pais)) +
+  geom_line(size = 1.5) +
+  #scale_color_colorblind() +
+  scale_color_manual(values = hex) +
+  labs(title = "Cantidad de manifestaciones por mes",
+       x = NULL,
+       y = "Cantidad de manifestaciones",
+       color = "país") +
+  scale_x_date(date_breaks = "4 month", date_labels = "%b\n%Y") +
+  coord_cartesian(ylim=c(0,1000))
+```
+
+```{r}
+#| echo: false
+graph11 + 
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 40),
+    panel.grid.major.y = element_line(color = "gray40"),
+    panel.grid.minor.y = element_line(color = "gray30"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  )
+```
+
+## Conclusiones
