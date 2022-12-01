@@ -12,6 +12,8 @@ self-contained: true
 
 ## Fuente de los datos {background-image="https://pbs.twimg.com/card_img/1594626347762126848/8BQhNFIT?format=jpg&name=small"}
 
+##### Datos de Eventos y Ubicación de Conflictos Armados (ACLED)
+
 ## Fuente de los datos
 
 ::: {.panel-tabset}
@@ -210,6 +212,117 @@ graph11 +
   )
 ```
 
+## Cantidad de muertos en manifestaciones por país
+
+```{r}
+#| echo: false
+#| warning: false
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(dslabs)
+library(showtext)
+library(ggthemes)
+library(scales)
+library(ggtext) # para editar anotaciones y etiquetas
+library(gghighlight) # para destacar valores en un gráfico
+library(here)
+#Sys.setlocale("LC_TIME", "English")
+#datos_protestas <- read_csv("Datos/datos-protestas.csv")
+datos_protestas <- read.csv(here::here("Datos/datos-protestas.csv"))
+muerte1 <- datos_protestas |> 
+  filter(Muertos > 0) |> 
+  group_by(Pais) |> 
+  summarize(Muertos = sum(Muertos)) |> 
+  arrange(desc(Muertos))
+
+muerte1 |> 
+  ggplot(aes(reorder(Pais, -Muertos), Muertos)) +
+  geom_col(fill = "#00d1ae") +
+  geom_text(aes(label = Muertos),
+            vjust = 1.5,
+            size = 7,
+            color = "white",
+            fontface = "bold") +
+  labs(x = NULL,
+       y = "Muertes") +
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  )
+```
+
+## Meses con mayor cantidad de muertos en manifestaciones por país
+
+```{r}
+#| echo: false
+#| warning: false
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(dslabs)
+library(showtext)
+library(ggthemes)
+library(scales)
+library(ggtext) # para editar anotaciones y etiquetas
+library(gghighlight) # para destacar valores en un gráfico
+library(here)
+#Sys.setlocale("LC_TIME", "English")
+#datos_protestas <- read_csv("Datos/datos-protestas.csv")
+datos_protestas <- read.csv(here::here("Datos/datos-protestas.csv"))
+muerte2 <- datos_protestas |> 
+  filter(Pais %in% c("Chile",
+                     "Colombia", "Venezuela", "Brazil")) |>
+  filter(Muertos > 0) |> 
+  group_by(Mes, Pais) |> 
+  filter(Muertos == max(Muertos)) |> 
+  summarize(fyl = paste(Pais, "\n",substr(Mes, start = 1, stop = 7)),
+            Muertos = Muertos) |> 
+  arrange(desc(Muertos))
+
+muerte2 <- head(muerte2, 10)
+
+muerte2 |> 
+  ggplot(aes(reorder(fyl, -Muertos), Muertos)) +
+  geom_col(fill = "#d1a000") +
+  geom_text(aes(label = Muertos),
+            vjust = 1.5,
+            size = 7,
+            color = "white",
+            fontface = "bold") +
+  labs(x = NULL,
+       y = "Cantidad de muertos") +
+  theme(
+    text = element_text(family = "Lato"),
+    plot.title = element_text(size = 24),
+    axis.text = element_text(size = 20), 
+    axis.title.y = element_text(size = 20),
+    legend.position = "top",
+    legend.justification = "left",
+    legend.text = element_text(size = 20),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    #plot.background = element_rect(fill = "#f3fafd"),
+    legend.background = element_blank(),
+    panel.background = element_blank(),
+    axis.ticks = element_line(size = 1)
+  )
+```
 
 ------------------------------------------------------------------------
 
